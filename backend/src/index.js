@@ -29,6 +29,14 @@ const limiter = rateLimit({
 });
 app.use('/api', limiter);
 
+app.get('/', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'API is running',
+    credit: 'made with love by manya shukla 2026',
+  });
+});
+
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/api/v1', v1Routes);
 
@@ -36,7 +44,7 @@ app.use((req, res) => {
   res.status(404).json({
     success: false,
     message: 'Route not found',
-    credit: 'made with love by manya shukla 2025',
+    credit: 'made with love by manya shukla 2026',
   });
 });
 app.use(errorHandler);
