@@ -34,7 +34,6 @@ A **scalable REST API** with **JWT authentication**, **role-based access**, and 
 
 ```bash
 cd backend
-cp .env.example .env
 # Edit .env: set MONGODB_URI, JWT_SECRET (and optionally PORT, FRONTEND_URL)
 npm install
 npm run dev
@@ -53,7 +52,7 @@ npm run dev
 
 App runs at **http://localhost:5173** and proxies `/api` to the backend.
 
-### 3. Admin user (optional)
+### 3. Admin user 
 
 Set in `.env`: `ADMIN_EMAIL`, `ADMIN_PASSWORD` (min 6 chars), `ADMIN_NAME`. On startup the backend creates or updates that user with role `admin`. No seed file—admin comes from env only.
 
