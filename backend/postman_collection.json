@@ -1,0 +1,106 @@
+{
+  "info": {
+    "name": "TaskFlow API v1",
+    "description": "Auth + Tasks CRUD. Set BASE_URL (e.g. http://localhost:5001/api/v1) and after login, set token in Auth header.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "BASE_URL", "value": "http://localhost:5001/api/v1" },
+    { "key": "token", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"test@example.com\",\n  \"password\": \"secret123\"\n}" },
+            "url": "{{BASE_URL}}/auth/register"
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": "if (pm.response.code === 200) {\n  const json = pm.response.json();\n  if (json.data && json.data.token) pm.collectionVariables.set('token', json.data.token);\n}"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"secret123\"\n}" },
+            "url": "{{BASE_URL}}/auth/login"
+          }
+        },
+        {
+          "name": "Get Me",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+            "url": "{{BASE_URL}}/auth/me"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tasks",
+      "item": [
+        {
+          "name": "List Tasks",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+            "url": { "raw": "{{BASE_URL}}/tasks?page=1&limit=10", "host": ["{{BASE_URL}}"], "path": ["tasks"], "query": [ { "key": "page", "value": "1" }, { "key": "limit", "value": "10" } ] }
+          }
+        },
+        {
+          "name": "Create Task",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Authorization", "value": "Bearer {{token}}" }, { "key": "Content-Type", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"title\": \"My first task\",\n  \"description\": \"Optional description\",\n  \"status\": \"pending\",\n  \"priority\": \"medium\"\n}" },
+            "url": "{{BASE_URL}}/tasks"
+          }
+        },
+        {
+          "name": "Get Task by ID",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+            "url": "{{BASE_URL}}/tasks/:id"
+          }
+        },
+        {
+          "name": "Update Task",
+          "request": {
+            "method": "PUT",
+            "header": [ { "key": "Authorization", "value": "Bearer {{token}}" }, { "key": "Content-Type", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"title\": \"Updated title\",\n  \"status\": \"in_progress\"\n}" },
+            "url": "{{BASE_URL}}/tasks/:id"
+          }
+        },
+        {
+          "name": "Delete Task",
+          "request": {
+            "method": "DELETE",
+            "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+            "url": "{{BASE_URL}}/tasks/:id"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "url": "{{BASE_URL}}/health"
+      }
+    }
+  ]
+}
