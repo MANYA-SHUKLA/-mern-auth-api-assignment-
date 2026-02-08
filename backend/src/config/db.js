@@ -1,7 +1,5 @@
 import mongoose from 'mongoose';
-
 const DB_NAME = 'mern_auth_api';
-
 export const connectDB = async () => {
   try {
     const uri = process.env.MONGODB_URI;
