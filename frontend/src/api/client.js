@@ -1,9 +1,7 @@
 const BASE = import.meta.env.VITE_API_BASE_URL || '/api/v1';
-
 function getToken() {
   return localStorage.getItem('token');
 }
-
 async function request(path, options = {}) {
   const url = path.startsWith('http') ? path : `${BASE}${path}`;
   const headers = {
@@ -23,7 +21,6 @@ async function request(path, options = {}) {
   }
   return data;
 }
-
 export const api = {
   auth: {
     register: (body) => request('/auth/register', { method: 'POST', body: JSON.stringify(body) }),
@@ -38,5 +35,4 @@ export const api = {
     delete: (id) => request(`/tasks/${id}`, { method: 'DELETE' }),
   },
 };
-
 export { getToken };
